@@ -1,5 +1,7 @@
 .vscode/**
 .vscode-test/**
+node_modules/**
+webview/**
 out/test/**
 src/**
 .gitignore
