@@ -8,6 +8,7 @@ function App() {
   const [query, setQuery] = useState("code");
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [size, setSize] = useState('full')
 
   const client_id = "8ba7716aecd63ca73b05122859d1ba50e87e94eb61e9d79bfd5753699fcb3c35";
   const fetchUrl = `https://api.unsplash.com/search/photos?client_id=${client_id}&query=${query}&page=${page}`;
@@ -32,19 +33,35 @@ function App() {
     }
   };
   
+  const getUrlPath = (url) => {
+    return url.split('?')[0]
+  }
+
   const getUrl = (url, type) => {
-    let result = url
+    let result = getUrlPath(url)
     switch(type){
       case 'markdown':
-        result = `![${url}](${url})`
+        result = `![${result}](${result})`
+        break;
       case 'html':
-        result = `<img src="${url}"></img>`
+        result = `<img src="${result}"></img>`
+        break
     }
     return result
   }
 
   const copyUrl = (url) => {
-
+    navigator.clipboard.writeText(url).then(function() {
+      window.vscode.postMessage({
+        command: 'message',
+        text: '复制成功'
+      })
+    }, function() {
+      window.vscode.postMessage({
+        command: 'message',
+        text: '复制失败'
+      })
+    })
   }
 
   useEffect(() => {
@@ -81,11 +98,11 @@ function App() {
               <p className="copy-button">复制链接</p>
               <div className="popup-dialog">
                 <span>图片链接</span>
-                <div><span>{getUrl(data.urls)}</span><button class="confirm-button" onClick={copyUrl()}>Copy</button></div>
+                <div><span>{getUrl(data.urls[size])}</span><button className="confirm-button" onClick={() => copyUrl(getUrl(data.urls[size]))}>Copy</button></div>
                 <span>Markdown</span>
-                <div><span></span><button class="confirm-button">Copy</button></div>
+                <div><span>{getUrl(data.urls[size], 'markdown')}</span><button className="confirm-button" onClick={ () => copyUrl(getUrl(data.urls[size], 'markdown'))}>Copy</button></div>
                 <span>HTML</span>
-                <div><span></span><button class="confirm-button">Copy</button></div>
+                <div><span>{getUrl(data.urls[size], 'html')}</span><button className="confirm-button" onClick={ () => copyUrl(getUrl(data.urls[size], 'html'))}>Copy</button></div>
               </div>
             </div>
           ))}

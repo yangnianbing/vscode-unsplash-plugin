@@ -19,8 +19,14 @@ export function activate(context: vscode.ExtensionContext) {
         retainContextWhenHidden: true
       }
     )
-    panel.webview.html = getWebViewContent(context, 'webview/build/index.html')
-
+    panel.webview.html = getWebviewContent(context, 'webview/build/index.html')
+    panel.webview.onDidReceiveMessage(
+      message => {
+        vscode.window.showInformationMessage(message.text);
+      },
+      null,
+      context.subscriptions
+    )
 	});
 
 	context.subscriptions.push(disposable);
@@ -30,7 +36,7 @@ function getExtensionFileAbsolutePath(context: vscode.ExtensionContext, relative
   return path.join(context.extensionPath, relativePath);
 }
 
-function getWebViewContent(context: vscode.ExtensionContext, templatePath: string) {
+function getWebviewContent(context: vscode.ExtensionContext, templatePath: string) {
   const resourcePath = getExtensionFileAbsolutePath(context, templatePath);
   const dirPath = path.dirname(resourcePath);
   let html = fs.readFileSync(resourcePath, 'utf-8');
@@ -38,7 +44,6 @@ function getWebViewContent(context: vscode.ExtensionContext, templatePath: strin
   html = html.replace(/(<link.+?href="|<script.+?src="|<img.+?src=")(.+?)"/g, (m, $1, $2) => {
       return $1 + vscode.Uri.file(path.resolve(dirPath, $2)).with({ scheme: 'vscode-resource' }).toString() + '"';
   });
-  console.log(html)
   return html
 }
 
