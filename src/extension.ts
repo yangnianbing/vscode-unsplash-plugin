@@ -8,7 +8,7 @@ import * as path from 'path'
 export function activate(context: vscode.ExtensionContext) {
   console.log('image-finder active')
   
-	let disposable = vscode.commands.registerCommand('imgage-find.open-search', () => {
+	let disposable = vscode.commands.registerCommand('image-find.open-search', () => {
 		// The code you place here will be executed every time your command is executed
     const panel = vscode.window.createWebviewPanel(
       "imageList",

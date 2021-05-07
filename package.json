@@ -1,6 +1,6 @@
 {
-	"name": "imgage-find",
-	"displayName": "imgage-find",
+	"name": "image-find",
+	"displayName": "image-find",
 	"description": "关键词搜索图片，图片源unsplash",
 	"publisher": "yangnianbing",
   "repository": "https://github.com/yangnianbing/vscode-unsplash-plugin",
@@ -18,8 +18,8 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "imgage-find.open-search",
-				"title": "Image-Finveder:search picture from unsplash"
+				"command": "image-find.open-search",
+				"title": "Image-Find:search picture from unsplash"
 			}
 		]
 	},

@@ -1,6 +1,5 @@
 # imgage-find README
-
-通过关键字搜索图片，可以复制url或者markdown或者a标签
+按F1或ctrl+shift+p执行命令Image-Finder:search picture from unsplash，输入关键字在unsplash中搜索图片，提供复制html, url, 或者markdown格式的图片链接
 
 ## Features
 
