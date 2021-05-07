@@ -4,7 +4,7 @@
 	"description": "关键词搜索图片，图片源unsplash",
 	"publisher": "yangnianbing",
   "repository": "https://github.com/yangnianbing/vscode-unsplash-plugin",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"engines": {
 		"vscode": "^1.55.0"
 	},
