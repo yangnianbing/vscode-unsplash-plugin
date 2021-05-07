@@ -9,6 +9,8 @@ function App() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [size, setSize] = useState('full')
+  const [message, setMessage] = useState('')
+  const [showMessage, setShowMessage] = useState(false)
 
   const client_id = "8ba7716aecd63ca73b05122859d1ba50e87e94eb61e9d79bfd5753699fcb3c35";
   const fetchUrl = `https://api.unsplash.com/search/photos?client_id=${client_id}&query=${query}&page=${page}`;
@@ -52,16 +54,18 @@ function App() {
 
   const copyUrl = (url) => {
     navigator.clipboard.writeText(url).then(function() {
-      window.vscode.postMessage({
-        command: 'message',
-        text: '复制成功'
-      })
+      notice('复制成功')
     }, function() {
-      window.vscode.postMessage({
-        command: 'message',
-        text: '复制失败'
-      })
+      notice('复制失败')
     })
+  }
+
+  const notice = (message) => {
+    setShowMessage(true)
+    setMessage(message)
+    setTimeout(() => {
+      setShowMessage(false)
+    },  2000)
   }
 
   useEffect(() => {
@@ -70,6 +74,7 @@ function App() {
 
   return (
     <div className="App flex">
+      <div className={["tip", showMessage ? 'show' : 'hide'].join(' ')}>{message}</div>
       <input
         type="text"
         onKeyDown={(e) => searchImages(e)}
@@ -95,14 +100,16 @@ function App() {
                 alt={data.alt_description}
               />
               <h4>Photo by {data.user.name} </h4>
-              <p className="copy-button">复制链接</p>
-              <div className="popup-dialog">
-                <span>图片链接</span>
-                <div><span>{getUrl(data.urls[size])}</span><button className="confirm-button" onClick={() => copyUrl(getUrl(data.urls[size]))}>Copy</button></div>
-                <span>Markdown</span>
-                <div><span>{getUrl(data.urls[size], 'markdown')}</span><button className="confirm-button" onClick={ () => copyUrl(getUrl(data.urls[size], 'markdown'))}>Copy</button></div>
-                <span>HTML</span>
-                <div><span>{getUrl(data.urls[size], 'html')}</span><button className="confirm-button" onClick={ () => copyUrl(getUrl(data.urls[size], 'html'))}>Copy</button></div>
+              <div className="botton-container">
+                <p className="copy-button">复制链接</p>
+                <div className="popup-dialog">
+                  <span>图片链接</span>
+                  <div><input className="show-value" value={getUrl(data.urls[size])}></input><button className="confirm-button" onClick={() => copyUrl(getUrl(data.urls[size]))}>Copy</button></div>
+                  <span>Markdown</span>
+                  <div><input className="show-value" value={getUrl(data.urls[size], 'markdown')}></input><button className="confirm-button" onClick={ () => copyUrl(getUrl(data.urls[size], 'markdown'))}>Copy</button></div>
+                  <span>HTML</span>
+                  <div><input className="show-value" value={getUrl(data.urls[size], 'html')}></input><button className="confirm-button" onClick={ () => copyUrl(getUrl(data.urls[size], 'html'))}>Copy</button></div>
+                </div>
               </div>
             </div>
           ))}
